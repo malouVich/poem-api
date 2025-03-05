@@ -1,10 +1,8 @@
 package app.Entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import app.DTO.PoemDTO;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -14,6 +12,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Poem {
 
     @Id
@@ -24,6 +23,18 @@ public class Poem {
     private int firstPublished;
     private String originalLanguage;
     private String poemStyle;
+    @Column(length = 4000)
     private String theme;
+    @Column(length = 30000)
     private String poemText;
+
+    public Poem(PoemDTO poemDTO) {
+        this.title = poemDTO.getTitle();
+        this.author = poemDTO.getAuthor();
+        this.firstPublished = poemDTO.getFirstPublished();
+        this.originalLanguage = poemDTO.getOriginalLanguage();
+        this.poemStyle = poemDTO.getPoemStyle();
+        this.theme = poemDTO.getTheme();
+        this.poemText = poemDTO.getPoemText();
+    }
 }

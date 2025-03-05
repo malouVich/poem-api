@@ -1,17 +1,63 @@
 package app;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import app.DAO.PoemDAO;
+import app.DTO.PoemDTO;
+import app.config.HibernateConfig;
+import app.controllers.PoemController;
+import io.javalin.Javalin;
+import jakarta.persistence.EntityManagerFactory;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+import static io.javalin.apibuilder.ApiBuilder.*;
+
+
+public class Main {
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private static final PoemDAO poemDAO = PoemDAO.getInstance(emf);
+
+    public static void main(String[] args) {
+
+        PoemController poemController = new PoemController();
+
+        Javalin.create(config ->{
+            config.router.contextPath = "/api";
+            config.router.apiBuilder(() ->
+            {
+
+                path("poem", () ->{
+
+//                    post("/", (ctx) -> {
+//                        // Hent JSON-body og konverter til PoemDTO
+//                        PoemDTO poemDTO = ctx.bodyAsClass(PoemDTO.class);
+//
+//                        // Gem digtet i databasen
+//                        poemController.createPoem(poemDTO);
+//
+//                        // Returner succesmeddelelse
+//                        ctx.status(201).json(poemDTO);
+//                    });
+
+                    // API endpoint for at hente alle digte
+                    get("/", (ctx) -> {
+                        ctx.json(poemController.getAllPoems());
+                    });
+                    post("/", (ctx) -> {
+                        PoemDTO newPoem = ctx.bodyAsClass(PoemDTO.class);
+                        PoemDTO returnedPoem = poemDAO.save(newPoem);
+                        ctx.json(returnedPoem);
+                    });
+                    get("/{id}",(ctx)-> {
+                        try {
+                            PoemDTO id = poemDAO.getById(Integer.parseInt(ctx.pathParam("id")));
+                            ctx.json(id);
+
+                        }catch (Exception e){
+                            ctx.status(404).result("Poem not found");
+                        }
+                    });
+
+
+                });
+            });
+        }).start(7070);
     }
 }

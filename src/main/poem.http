@@ -1,0 +1,12 @@
+POST localhost:7070/api/poem
+Content-Type: "application/json"
+
+{
+      "author": "Edgar Allan Poe",
+      "title": "Lost Love",
+      "first_published": 1849,
+      "original_language": "English",
+      "poem_style": "Elegy",
+      "theme": "The speaker of the poem talks about a lost love, Annabel Lee, and may have been based on Poe's own relationship with his wife Virginia, though that is disputed.",
+      "poem":" A dream within a dream, I sigh, As love departs with fleeting light; She fades into the endless sky, And leaves me lost within the night."
+}
