@@ -88,28 +88,28 @@ public class PoemDAO {
                 return null;
             }
 
-            poem.setAuthor(poem.getAuthor());
-            poem.setPoemText(poem.getPoemText());
-            poem.setPoemStyle(poem.getPoemStyle());
-            poem.setTheme(poem.getTheme());
-            poem.setTitle(poem.getTitle());
-            poem.setFirstPublished(poem.getFirstPublished());
-            poem.setOriginalLanguage(poem.getOriginalLanguage());
+            poem.setAuthor(poemDTO.getAuthor());
+            poem.setPoemText(poemDTO.getPoemText());
+            poem.setPoemStyle(poemDTO.getPoemStyle());
+            poem.setTheme(poemDTO.getTheme());
+            poem.setTitle(poemDTO.getTitle());
+            poem.setFirstPublished(poemDTO.getFirstPublished());
+            poem.setOriginalLanguage(poemDTO.getOriginalLanguage());
 
             em.merge(poem);
 
             em.getTransaction().commit();
 
-            PoemDTO updatePoem = new PoemDTO();
-            updatePoem.setAuthor(poem.getAuthor());
-            updatePoem.setPoemText(poem.getPoemText());
-            updatePoem.setPoemStyle(poem.getPoemStyle());
-            updatePoem.setTheme(poem.getTheme());
-            updatePoem.setTitle(poem.getTitle());
-            updatePoem.setFirstPublished(poem.getFirstPublished());
-            updatePoem.setOriginalLanguage(poem.getOriginalLanguage());
+//            PoemDTO updatePoem = new PoemDTO();
+//            updatePoem.setAuthor(poem.getAuthor());
+//            updatePoem.setPoemText(poem.getPoemText());
+//            updatePoem.setPoemStyle(poem.getPoemStyle());
+//            updatePoem.setTheme(poem.getTheme());
+//            updatePoem.setTitle(poem.getTitle());
+//            updatePoem.setFirstPublished(poem.getFirstPublished());
+//            updatePoem.setOriginalLanguage(poem.getOriginalLanguage());
 
-            return updatePoem;
+            return new PoemDTO(poem);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
