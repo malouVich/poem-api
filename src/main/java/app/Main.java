@@ -45,17 +45,25 @@ public class Main {
                         PoemDTO returnedPoem = poemDAO.save(newPoem);
                         ctx.json(returnedPoem);
                     });
-                    get("/{id}",(ctx)-> {
+//                    get("/{id}",(ctx)-> {
+//                        try {
+//                            PoemDTO id = poemDAO.getById(Integer.parseInt(ctx.pathParam("id")));
+//                            ctx.json(id);
+//
+//                        }catch (Exception e){
+//                            ctx.status(404).result("Poem not found");
+//                        }
+//                    });
+                    put("/{id}", (ctx) -> {
                         try {
-                            PoemDTO id = poemDAO.getById(Integer.parseInt(ctx.pathParam("id")));
-                            ctx.json(id);
+                            PoemDTO poem = ctx.bodyAsClass(PoemDTO.class);
+                            PoemDTO updatedId = poemDAO.updateById(Integer.parseInt(ctx.pathParam("id")),poem);
+                            ctx.json(updatedId);
 
                         }catch (Exception e){
                             ctx.status(404).result("Poem not found");
                         }
                     });
-
-
                 });
             });
         }).start(7070);

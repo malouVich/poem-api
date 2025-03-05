@@ -31,7 +31,7 @@ public class PoemDAO {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
 
-        try{
+        try {
             transaction.begin();
             Poem poem = new Poem();
             poem.setId(poemDTO.getId());
@@ -48,14 +48,14 @@ public class PoemDAO {
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
-        }finally {
+        } finally {
             em.close();
         }
         return poemDTO;
     }
 
-    public PoemDTO getById(int id){
-        try(EntityManager em = emf.createEntityManager()){
+    public PoemDTO getById(int id) {
+        try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Poem> query = em.createQuery("SELECT p FROM Poem p WHERE p.id = :id", Poem.class);
             query.setParameter("id", id);
             Poem poem = query.getSingleResult();  // Brug getSingleResult() for at få et enkelt resultat
@@ -77,4 +77,44 @@ public class PoemDAO {
             return null; // Håndter fejlsituationer og returner null
         }
     }
+
+    public PoemDTO updateById(int id, PoemDTO poemDTO) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            Poem poem = em.find(Poem.class, id);
+
+            if (poem == null) {
+                return null;
+            }
+
+            poem.setAuthor(poem.getAuthor());
+            poem.setPoemText(poem.getPoemText());
+            poem.setPoemStyle(poem.getPoemStyle());
+            poem.setTheme(poem.getTheme());
+            poem.setTitle(poem.getTitle());
+            poem.setFirstPublished(poem.getFirstPublished());
+            poem.setOriginalLanguage(poem.getOriginalLanguage());
+
+            em.merge(poem);
+
+            em.getTransaction().commit();
+
+            PoemDTO updatePoem = new PoemDTO();
+            updatePoem.setAuthor(poem.getAuthor());
+            updatePoem.setPoemText(poem.getPoemText());
+            updatePoem.setPoemStyle(poem.getPoemStyle());
+            updatePoem.setTheme(poem.getTheme());
+            updatePoem.setTitle(poem.getTitle());
+            updatePoem.setFirstPublished(poem.getFirstPublished());
+            updatePoem.setOriginalLanguage(poem.getOriginalLanguage());
+
+            return updatePoem;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+
+
